@@ -1,0 +1,37 @@
+
+name: "Fastlane action"
+description: "Writing github action for executing fastlance from repository \
+for testing purposes."
+inputs:
+   organizationName:
+     required: true
+     type: string
+   fastlaneRepository:
+     required: true
+     type: string
+   destinationRespository:
+     required: true
+     type: string
+   gitPATToken:
+     required: true
+     type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Checkout Fastlane'
+      uses: actions/checkout@main
+      with:
+        repository: ${{ inputs.organizationName }}/${{ inputs.fastlaneRepository }}
+        path: scripts
+        token: ${{ inputs.gitPATToken }}
+
+    - name: 'Script folder created in project dir and moving files from scripts to project dir'
+      shell: bash
+      run: |
+       mv -v scripts/*  ${{inputs.destinationRespository }}
+
+    - name: 'Run Fastlane'
+      shell: bash
+      run: |
+       fastlane firstTestLane
