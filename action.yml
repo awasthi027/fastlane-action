@@ -34,4 +34,5 @@ runs:
     - name: 'Run Fastlane'
       shell: bash
       run: |
-       fastlane firstTestLane
+        bundle install
+        fastlane ios podLibLint
