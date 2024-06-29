@@ -1,38 +1,21 @@
-
-name: "Fastlane action"
-description: "Writing github action for executing fastlance from repository \
-for testing purposes."
+name: 'Runtime Variable Substitution Override Input Parameter'
+description: 'Convert input parameters to runtime-overrides semicolon delimited list of kvp'
 inputs:
-   organizationName:
-     required: true
-     type: string
-   fastlaneRepository:
-     required: true
-     type: string
-   destinationRespository:
-     required: true
-     type: string
-   gitPATToken:
-     required: true
-     type: string
-
+  input-params:
+    description: 'Input parameters JSON'
+    required: true
+    type: string
+    default: ''
+outputs:
+  input-params:
+    description: 'Output rvs delimited list of kvp'
+    value: ${{ steps.kvp-values.outputs.input-params }}
+  
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
-    - name: 'Checkout Fastlane'
-      uses: actions/checkout@main
-      with:
-        repository: ${{ inputs.organizationName }}/${{ inputs.fastlaneRepository }}
-        path: scripts
-        token: ${{ inputs.gitPATToken }}
-
-    - name: 'Script folder created in project dir and moving files from scripts to project dir'
-      shell: bash
+    - name: List all workflow inputs in KVP format
+      id: kvp-values
       run: |
-       mv -v scripts/*  ${{inputs.destinationRespository }}
-
-    - name: 'Run Fastlane'
       shell: bash
-      run: |
-        bundle install
-        fastlane ios podLibLint
+  
