@@ -1,21 +1,41 @@
-name: 'Runtime Variable Substitution Override Input Parameter'
-description: 'Convert input parameters to runtime-overrides semicolon delimited list of kvp'
+name: "Fastlane action"
+description: "Writing github action for executing fastlance from repository \
+for testing purposes."
 inputs:
-  input-params:
-    description: 'Input parameters JSON'
-    required: true
-    type: string
-    default: ''
-outputs:
-  input-params:
-    description: 'Output rvs delimited list of kvp'
-    value: ${{ steps.kvp-values.outputs.input-params }}
-  
+   working_repo:
+     required: true
+     type: string
+   fastlane_repo:
+     required: true
+     type: string
+   lane_name:
+     required: true
+     type: string
+   env_name:
+     required: true
+     type: string
+   gitPATToken:
+     required: true
+     type: string
+
 runs:
-  using: "composite"
+  using: 'composite'
+
   steps:
-    - name: List all workflow inputs in KVP format
-      id: kvp-values
-      run: |
+    - name: "Checkout Soure code"
+      uses: actions/checkout@main
+      with:
+        repository: ${{ inputs.fastlane_repo }}
+        path: scripts
+        token: ${{ inputs.gitPATToken }}
+
+    - name: 'Script folder created in project dir and moving files from scripts to project dir'
       shell: bash
-  
+      run: |
+       mv -v scripts/*  ${{ inputs.working_repo }} 
+
+    - name: "Run Fastlane"
+      shell: bash
+      run: |
+        bundle install
+        fastlane ios ${{ inputs.lane_name }} 
