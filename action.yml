@@ -33,7 +33,6 @@ runs:
       shell: bash
       run: |
        mv -v scripts/*  ${{ inputs.working_repo }} 
-
     - name: "Run Fastlane"
       shell: bash
       run: |
