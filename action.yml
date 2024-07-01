@@ -14,6 +14,9 @@ inputs:
    env_name:
      required: true
      type: string
+   script_path:
+     required: false
+     type: string
    gitPATToken:
      required: true
      type: string
@@ -29,11 +32,17 @@ runs:
         path: scripts
         token: ${{ inputs.gitPATToken }}
 
+    - name: "Run PreScript"
+       if: ${{ inputs.script_path }}
+      shell: bash
+      run: |
+       chmod 777  ${{ inputs.script_path }} 
+       ${{ inputs.script_path }} 
+
     - name: 'Script folder created in project dir and moving files from scripts to project dir'
       shell: bash
       run: |
        mv -v scripts/*  ${{ inputs.working_repo }} 
-
     - name: "Run Fastlane"
       shell: bash
       run: |
