@@ -1,5 +1,5 @@
 name: "Fastlane action"
-description: "Writing github action for executing fastlance from repository \
+description: "This GitHub Execute PreScript And Fastlane by assuming Fastlane Repository present in working Dir\
 for testing purposes."
 inputs:
    working_repo:
@@ -32,17 +32,17 @@ runs:
         path: scripts
         token: ${{ inputs.gitPATToken }}
 
+    - name: 'Script folder created in project dir and moving files from scripts to project dir'
+      shell: bash
+      run: |
+       mv -v scripts/*  ${{ inputs.working_repo }} 
+       
     - name: "Run PreScript"
-       if: ${{ inputs.script_path }}
       shell: bash
       run: |
        chmod 777  ${{ inputs.script_path }} 
        ${{ inputs.script_path }} 
 
-    - name: 'Script folder created in project dir and moving files from scripts to project dir'
-      shell: bash
-      run: |
-       mv -v scripts/*  ${{ inputs.working_repo }} 
     - name: "Run Fastlane"
       shell: bash
       run: |
