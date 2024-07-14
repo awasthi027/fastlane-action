@@ -36,15 +36,7 @@ runs:
       shell: bash
       run: |
        mv -v scripts/*  ${{ inputs.working_repo }} 
-       
-    # - name: "Run PreScript"
-    #   shell: bash
-    #   run: |
-    #    chmod 777  ${{ inputs.script_path }} 
-    #    ${{ inputs.script_path }} 
-
     - name: "Run Fastlane"
       shell: bash
       run: |
-      
         bundle exec fastlane ios ${{ inputs.lane_name }} 
